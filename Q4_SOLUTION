@@ -1,0 +1,12 @@
+SELECT id, name, designation, 1 AS iteration
+FROM emp_details
+WHERE name = 'Asha'
+UNION ALL
+SELECT e.id, e.name, e.designation, 2 AS iteration
+FROM emp_details e
+WHERE e.manager_id = (SELECT id FROM emp_details WHERE name = 'Asha')
+UNION ALL
+SELECT e.id, e.name, e.designation, 3 AS iteration
+FROM emp_details e
+WHERE e.manager_id IN (SELECT id FROM emp_details WHERE manager_id = (SELECT id FROM emp_details WHERE name = 'Asha'))
+ORDER BY iteration, id;
