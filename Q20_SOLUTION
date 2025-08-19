@@ -1,0 +1,12 @@
+WITH all_friends AS (
+    SELECT friend1, friend2 FROM Friends
+    UNION
+    SELECT friend2, friend1 FROM Friends)
+SELECT DISTINCT f.friend1, f.friend2, COUNT(cf.friend1) OVER (PARTITION BY f.friend1, f.friend2) AS mutual_friends
+FROM Friends f
+LEFT JOIN all_friends cf ON f.friend1 = cf.friend1
+AND cf.friend2 IN (
+        SELECT cf2.friend2
+        FROM all_friends cf2
+        WHERE f.friend2 = cf2.friend1
+    );
