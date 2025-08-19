@@ -1,0 +1,14 @@
+
+with cte as
+(select day_1 as 30_days from weather
+union all
+select day_2 from weather
+union all
+select day_3 from weather
+union all
+select day_4 from weather
+union all
+select day_5 from weather
+union all
+select day_6 from weather)
+select min(30_days) as min_temp, max(30_days) as max_temp, round(avg(30_days),2) as avg_temp from cte;
