@@ -1,0 +1,8 @@
+select id, 
+max(case when year = 2011 then round(totalpay,2) else 0 end) as PAY_2011,
+max(case when year = 2012 then round(totalpay,2) else 0 end) as PAY_2012,
+max(case when year = 2013 then round(totalpay,2) else 0 end) as PAY_2013,
+max(case when year = 2014 then round(totalpay,2) else 0 end) as PAY_2014
+from sf_public_salaries
+group by id
+order by id;
