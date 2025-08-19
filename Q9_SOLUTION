@@ -1,0 +1,45 @@
+-- Step 1: Deduplicate login dates
+WITH cleaned AS (
+  SELECT DISTINCT user_id, DATE(login_date) AS login_date
+  FROM user_login
+),
+
+-- Step 2: Assign row numbers to find gaps
+main AS (
+  SELECT 
+    user_id, 
+    login_date,
+    ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY login_date) AS rn
+  FROM cleaned
+),
+
+-- Step 3: Create a "flag" to group consecutive dates
+logic AS (
+  SELECT 
+    user_id, 
+    login_date, 
+    DATE_SUB(login_date, INTERVAL rn DAY) AS flag
+  FROM main
+),
+
+-- Step 4: Count lengths of consecutive sequences
+grouped AS (
+  SELECT 
+    user_id,
+    flag,
+    MIN(login_date) AS start_date,
+    MAX(login_date) AS end_date,
+    COUNT(*) AS consecutive_days
+  FROM logic
+  GROUP BY user_id, flag
+)
+
+-- Step 5: Final filter
+SELECT 
+  user_id,
+  start_date,
+  end_date,
+  consecutive_days
+FROM grouped
+WHERE consecutive_days >= 5
+ORDER BY user_id, start_date;
