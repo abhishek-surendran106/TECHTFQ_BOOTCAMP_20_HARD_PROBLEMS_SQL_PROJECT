@@ -1,0 +1,36 @@
+SELECT customer_id,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Jan-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Jan-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Feb-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Feb-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Mar-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Mar-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Apr-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Apr-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'May-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `May-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Jun-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Jun-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Jul-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Jul-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Aug-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Aug-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Sep-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Sep-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Oct-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Oct-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Nov-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Nov-21`,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Dec-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END) AS `Dec-21`,
+  SUM(CAST(REPLACE(amount, '$', '') AS SIGNED)) AS total
+FROM sales_data
+GROUP BY customer_id
+
+UNION ALL
+
+SELECT 'Total' AS customer_id,
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Jan-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Feb-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Mar-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Apr-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'May-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Jun-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Jul-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Aug-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Sep-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Oct-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Nov-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  SUM(CASE WHEN DATE_FORMAT(sales_date, '%b-%y') = 'Dec-21' THEN CAST(REPLACE(amount, '$', '') AS SIGNED) ELSE 0 END),
+  NULL AS total
+FROM sales_data
+ORDER BY 1;
+
