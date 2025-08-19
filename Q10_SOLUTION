@@ -1,0 +1,20 @@
+WITH paired AS (
+  SELECT
+    v.value AS velocity,
+    l.value AS level
+  FROM auto_repair v
+  JOIN auto_repair l
+    ON v.client = l.client
+   AND v.auto = l.auto
+   AND v.repair_date = l.repair_date
+   AND v.indicator = 'velocity'
+   AND l.indicator = 'level'
+)
+SELECT
+   velocity,
+  SUM(CASE WHEN LOWER(level) = 'good' THEN 1 ELSE 0 END) AS good,
+  SUM(CASE WHEN LOWER(level) = 'wrong' THEN 1 ELSE 0 END) AS wrong,
+  SUM(CASE WHEN LOWER(level) = 'regular' THEN 1 ELSE 0 END) AS regular
+FROM paired
+GROUP BY velocity
+ORDER BY velocity;
