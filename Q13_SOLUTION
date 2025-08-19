@@ -1,0 +1,13 @@
+select * from
+(select employee, min(dates) as from_date, max(dates) as to_date, status from
+(select *, row_number() over (partition by employee order by dates) as attendance, dates - row_number() over (partition by employee order by dates) as logic
+from emp_attendance
+where status = "PRESENT") as temp
+group by employee, logic
+union all
+select employee, min(dates) as from_date, max(dates) as to_date, status from
+(select *, row_number() over (partition by employee order by dates) as attendance, dates - row_number() over (partition by employee order by dates) as logic
+from emp_attendance
+where status = "ABSENT") as temp
+group by employee, logic) as main
+order by employee, from_date;
