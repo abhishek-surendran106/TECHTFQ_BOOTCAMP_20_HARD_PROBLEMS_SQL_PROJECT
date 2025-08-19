@@ -1,0 +1,8 @@
+select ge.to_user as receiver,
+sum(case when gl.label = "Shopping" then 1 else 0 end) as Shopping,
+sum(case when gl.label = "Social" then 1 else 0 end) as Social,
+sum(case when gl.label = "Promotion" then 1 else 0 end) as Promotion
+from google_gmail_emails ge
+join google_gmail_labels gl on ge.id = gl.email_id
+group by ge.to_user
+order by receiver;
