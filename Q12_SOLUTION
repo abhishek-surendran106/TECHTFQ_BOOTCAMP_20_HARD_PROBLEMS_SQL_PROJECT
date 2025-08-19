@@ -1,0 +1,34 @@
+SELECT 
+    pairs.left_user,
+    pairs.right_user,
+    COALESCE(GROUP_CONCAT(common.hobby SEPARATOR ', '), '-') AS hobby
+FROM (
+    -- All unique user pairs
+    SELECT 
+        u1.user_id AS left_user,
+        u2.user_id AS right_user
+    FROM 
+        user_hobbies u1
+    JOIN 
+        user_hobbies u2
+        ON u1.user_id < u2.user_id
+    GROUP BY 
+        u1.user_id, u2.user_id
+) AS pairs
+LEFT JOIN (
+    -- Matching hobbies
+    SELECT 
+        a.user_id AS user1,
+        b.user_id AS user2,
+        a.hobby
+    FROM 
+        user_hobbies a
+    JOIN 
+        user_hobbies b
+        ON a.hobby = b.hobby AND a.user_id < b.user_id
+) AS common
+ON pairs.left_user = common.user1 AND pairs.right_user = common.user2
+GROUP BY 
+    pairs.left_user, pairs.right_user
+ORDER BY 
+    pairs.left_user, pairs.right_user;
