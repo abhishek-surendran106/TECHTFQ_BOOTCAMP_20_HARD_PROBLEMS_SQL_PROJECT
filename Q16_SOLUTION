@@ -1,0 +1,53 @@
+WITH cte_marks AS (
+    SELECT student_id, s.name, 'S1' AS subject_code, subject1 AS marks
+    FROM student_marks sm
+    JOIN students s ON s.roll_no = sm.student_id
+    WHERE subject1 IS NOT NULL
+    UNION ALL
+    SELECT student_id, s.name, 'S2', subject2
+    FROM student_marks sm
+    JOIN students s ON s.roll_no = sm.student_id
+    WHERE subject2 IS NOT NULL
+    UNION ALL
+    SELECT student_id, s.name, 'S3', subject3
+    FROM student_marks sm
+    JOIN students s ON s.roll_no = sm.student_id
+    WHERE subject3 IS NOT NULL
+    UNION ALL
+    SELECT student_id, s.name, 'S4', subject4
+    FROM student_marks sm
+    JOIN students s ON s.roll_no = sm.student_id
+    WHERE subject4 IS NOT NULL
+    UNION ALL
+    SELECT student_id, s.name, 'S5', subject5
+    FROM student_marks sm
+    JOIN students s ON s.roll_no = sm.student_id
+    WHERE subject5 IS NOT NULL
+    UNION ALL
+    SELECT student_id, s.name, 'S6', subject6
+    FROM student_marks sm
+    JOIN students s ON s.roll_no = sm.student_id
+    WHERE subject6 IS NOT NULL
+),
+cte_agg AS (
+    SELECT  
+        cm.student_id,
+        cm.name,
+        ROUND(AVG(marks), 2) AS percentage_marks,
+        GROUP_CONCAT(
+            CASE WHEN marks >= cs.pass_marks THEN null ELSE cs.name END
+            SEPARATOR ', '
+        ) AS failed_subjects
+    FROM cte_marks cm
+    JOIN subjects cs  
+        ON cs.id = cm.subject_code
+    GROUP BY cm.student_id, cm.name
+)
+SELECT *,
+    CASE 
+        WHEN failed_subjects IS NOT NULL AND failed_subjects <> '' THEN 'Fail'
+        WHEN percentage_marks >= 70 THEN 'First Class'
+        WHEN percentage_marks BETWEEN 50 AND 70 THEN 'Second Class'
+        ELSE 'Third Class'
+    END AS Result
+FROM cte_agg;
